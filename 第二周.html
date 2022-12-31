@@ -145,7 +145,6 @@
                     email: '',
                     password: '',
                     isLogin: false,
-                    uid: '',
                     products: [],
                     productDetails: {}
                 }
@@ -159,13 +158,9 @@
                     axios.post(`${url}/admin/signin`, config)
                         .then(res => {
                             document.cookie = `token=${res.data.token};expires=${new Date(res.data.expired)};`;
-                            this.changeLogin();
-                            this.uid = res.data.uid;
-                            this.email = '';
-                            this.password = '';
+                            this.changeLogin()
                             this.getData();
                         })
-
                         .catch(err => {
                             alert('登入失敗!');
                             console.log(err);
@@ -177,6 +172,8 @@
                 logOut() {
                     document.cookie = `token='';expires=${new Date(0)};`;
                     alert('登出成功');
+                    this.email = '';
+                    this.password = '';
                     this.isLogin = false;
                 },
                 getData() {
