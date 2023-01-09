@@ -56,7 +56,7 @@
             <h1 class="fs-3 text-center">登入</h1>
             <form class="d-flex flex-column">
                 <label for="email" class="form-label">帳號:</label>
-                <input type="text" name="帳號" id="email" class="form-control mb-2" placeholder="請輸入登入信箱..."
+                <input type="email" name="帳號" id="email" class="form-control mb-2" placeholder="請輸入登入信箱..."
                     v-model.trim="email">
                 <label for="password" class="form-label">密碼:</label>
                 <input type="password" name="帳號" id="password" class="form-control mb-4" placeholder="請輸入密碼..."
@@ -177,7 +177,6 @@
                     this.isLogin = false;
                 },
                 getData() {
-                    axios.defaults.headers.common['Authorization'] = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1");
                     axios.get(`${url}/api/${api_path}/admin/products/all`)
                         .then(res => {
                             this.products = Object.values(res.data.products);
@@ -192,6 +191,7 @@
             mounted() {
                 this.changeLogin();
                 if (document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1")) {
+                    axios.defaults.headers.common['Authorization'] = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1");
                     this.getData();
                 };
             },
