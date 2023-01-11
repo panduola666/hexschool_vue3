@@ -27,8 +27,21 @@ const app ={
                 this.getProductData();
             })
             .catch(err=>{
-                console.log(err);
                 alert('登入失敗');
+            })
+        },
+        checkLogin () {
+            const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+            axios.defaults.headers.common['Authorization'] = token;
+            axios.post(`${baseUrl}/api/user/check`)
+            .then(res=>{
+                alert(`${res.data.uid} 歡迎`); 
+                this.isLoad = true;
+                this.getProductData(); 
+            })
+            .catch(err=>{
+                alert(JSON.parse(err.request.response).message);
+                this.isLoad = false;
             })
         },
         getProductData () {
@@ -36,9 +49,6 @@ const app ={
             axios.get(`${baseUrl}/api/${apiPath}/admin/products/all`)
             .then(res => {
                 this.products = Object.values(res.data.products);
-            })
-            .catch(err => {
-                console.log(err);
             })
         },
         productInfoReset () {
@@ -51,7 +61,6 @@ const app ={
         postProduct () {
             // 編輯
             if (this.productInfo.id) {
-                console.log('編輯');
                 axios.put(`${baseUrl}/api/${apiPath}/admin/product/${this.productInfo.id}`,{
                     data : this.productInfo
                 })
@@ -86,9 +95,6 @@ const app ={
                 this.openRemoveModal = false;
                 this.getProductData();
             })
-            .catch(err => {
-                console.log(err);
-            })
         }
     },
     watch:{
@@ -102,12 +108,13 @@ const app ={
         }
     },
     mounted() {
-        if (document.cookie.includes('token')) {
-            this.isLoad = true;
-            const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-            axios.defaults.headers.common['Authorization'] = token;
-            this.getProductData();
-        }
+        this.checkLogin();
+        // if (document.cookie.includes('token')) {
+        //     this.isLoad = true;
+            // const token = document.cookie.replace(/(?:(?:^|.*;\s*)token\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+            // axios.defaults.headers.common['Authorization'] = token;
+            // this.getProductData();
+        // }
     },
 }
 createApp(app).mount('#app');
