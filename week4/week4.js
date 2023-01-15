@@ -15,6 +15,7 @@ const app ={
             isLoad: false,
             products:[],
             productInfo:{
+                remainingNum: 0,
                 imagesUrl: []
             },
             openProductModal: false,
@@ -59,9 +60,7 @@ const app ={
             })
         },
         productInfoReset (requiredMsg) {
-            this.productInfo = {
-                imagesUrl: []
-            };
+            this.productInfo = this.$options.data().productInfo;
             this.openProductModal = false;
             requiredMsg.classList.remove('outline');
         },
@@ -116,9 +115,6 @@ const app ={
             axios.post(`${baseUrl}/api/${apiPath}/admin/upload`,formData)
             .then(res=>{
                 this.productInfo.imageUrl = res.data.imageUrl;
-            })
-            .catch(err=>{
-                console.log(err);
             })
         }
     },
