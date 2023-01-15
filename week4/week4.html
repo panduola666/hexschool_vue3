@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <title>第四週 - 熟練 Vue.js</title>
+</head>
+
+
+<body class="bg-yellow-100">
+    <a href="../index.html" class="block bg-black text-white py-2 text-center fixed top-0 w-screen">回首頁</a>
+    <div class="container h-screen relative px-10 pt-9" id="app">
+        <form v-if="!isLoad"
+            class="bg-yellow-200 flex flex-col absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 py-10 px-5">
+            <h1 class="text-center text-3xl mb-3 font-semibold">請先登入</h1>
+            <input v-model="user.username" type="email" name="email" id="email" placeholder="Email address"
+                aria-label="Email address" class="mb-4 p-2">
+            <input v-model="user.password" type="password" name="password" id="password" placeholder="Password"
+                aria-label="Password" class="mb-4 p-2">
+            <button @click.prevent="login" type="submit"
+                class="bg-yellow-400 text-white font-semibold text-xl rounded-2xl p-2 hover:bg-yellow-600">登入</button>
+        </form>
+        <div v-else>
+            <button type="button"
+                class="w-52 float-right my-4 mr-4 border-2 text-white font-semibold text-xl rounded-2xl p-2 bg-orange-400 shadow-md hover:bg-orange-600 transition-all"
+                @click="openProductModal = true">建立新的產品</button>
+            <table class="table-auto w-full text-center divide-y divide-black">
+                <thead>
+                    <tr>
+                        <th>分類</th>
+                        <th>產品名稱</th>
+                        <th>原價</th>
+                        <th>售價</th>
+                        <th>剩餘數量</th>
+                        <th>是否啟用</th>
+                        <th>編輯</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-300">
+                    <tr v-if="!products.length">
+                        <td colspan="6">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                style="margin: auto; background: rgba(241, 242, 243, 0); display: block;" width="200px"
+                                height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                                <g transform="rotate(0 50 50)">
+                                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#1d0e0b">
+                                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s"
+                                            begin="-0.9166666666666666s" repeatCount="indefinite"></animate>
+                                    </rect>
+                                </g>
+                                <g transform="rotate(30 50 50)">
+                                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#1d0e0b">
+                                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s"
+                                            begin="-0.8333333333333334s" repeatCount="indefinite"></animate>
+                                    </rect>
+                                </g>
+                                <g transform="rotate(60 50 50)">
+                                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#1d0e0b">
+                                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s"
+                                            begin="-0.75s" repeatCount="indefinite"></animate>
+                                    </rect>
+                                </g>
+                                <g transform="rotate(90 50 50)">
+                                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#1d0e0b">
+                                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s"
+                                            begin="-0.6666666666666666s" repeatCount="indefinite"></animate>
+                                    </rect>
+                                </g>
+                                <g transform="rotate(120 50 50)">
+                                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#1d0e0b">
+                                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s"
+                                            begin="-0.5833333333333334s" repeatCount="indefinite"></animate>
+                                    </rect>
+                                </g>
+                                <g transform="rotate(150 50 50)">
+                                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#1d0e0b">
+                                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s"
+                                            begin="-0.5s" repeatCount="indefinite"></animate>
+                                    </rect>
+                                </g>
+                                <g transform="rotate(180 50 50)">
+                                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#1d0e0b">
+                                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s"
+                                            begin="-0.4166666666666667s" repeatCount="indefinite"></animate>
+                                    </rect>
+                                </g>
+                                <g transform="rotate(210 50 50)">
+                                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#1d0e0b">
+                                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s"
+                                            begin="-0.3333333333333333s" repeatCount="indefinite"></animate>
+                                    </rect>
+                                </g>
+                                <g transform="rotate(240 50 50)">
+                                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#1d0e0b">
+                                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s"
+                                            begin="-0.25s" repeatCount="indefinite"></animate>
+                                    </rect>
+                                </g>
+                                <g transform="rotate(270 50 50)">
+                                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#1d0e0b">
+                                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s"
+                                            begin="-0.16666666666666666s" repeatCount="indefinite"></animate>
+                                    </rect>
+                                </g>
+                                <g transform="rotate(300 50 50)">
+                                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#1d0e0b">
+                                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s"
+                                            begin="-0.08333333333333333s" repeatCount="indefinite"></animate>
+                                    </rect>
+                                </g>
+                                <g transform="rotate(330 50 50)">
+                                    <rect x="47" y="24" rx="3" ry="6" width="6" height="12" fill="#1d0e0b">
+                                        <animate attributeName="opacity" values="1;0" keyTimes="0;1" dur="1s" begin="0s"
+                                            repeatCount="indefinite"></animate>
+                                    </rect>
+                                </g>
+                            </svg>
+                        </td>
+                    </tr>
+                    <tr v-for="(product, index) in products" :key="product.title">
+                        <td class="py-2">{{ product.category }}</td>
+                        <td class="py-2">{{ product.title }}</td>
+                        <td class="py-2">{{ product.origin_price }}</td>
+                        <td class="py-2">{{ product.price }}</td>
+                        <td class="py-2">{{ product.remainingNum }}</td>
+                        <td class="py-2">
+                            <span class="text-green-400" v-if="product.is_enabled">啟用</span>
+                            <span class="text-red-400" v-else>未啟用</span>
+                        </td>
+                        <td class="py-2">
+                            <button @click="productInfo = {...product};openProductModal=true" type="button"
+                                class="border-2 py-1 px-2 rounded border-blue-400 text-blue-400 hover:bg-blue-400 hover:text-white transition-all mr-2">編輯</button>
+                            <button @click="productInfo = product;openRemoveModal=true" type="button"
+                                class="border-2 py-1 px-2 rounded border-red-400 text-red-400 hover:bg-red-400 hover:text-white transition-all">刪除</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- 分頁 -->
+            <pagination :pages="pages" @get-data="getProductData"></pagination>
+
+        </div>
+
+        <!-- 新增/編輯產品 -->
+        <product-modal v-if="openProductModal" :product-info="productInfo" @product-reset="productInfoReset"
+            @post-product="postProduct" @local-img="localImg"></product-modal>
+
+        <!-- 刪除產品 -->
+        <remove-modal v-if="openRemoveModal" :product-info="productInfo" :open-remove-modal="openRemoveModal"
+            @remove-product="removeProduct" @close-modal="openRemoveModal = false"></remove-modal>
+    </div>
+    <script src="./week4.js" type="module"></script>
+</body>
+
+</html>

@@ -1,4 +1,8 @@
 import { createApp } from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.45/vue.esm-browser.js';
+import pagination from './components/pagination.js';
+import productModal from './components/productModal.js';
+import removeModal from './components/removeModal.js';
+
 const baseUrl = 'https://vue3-course-api.hexschool.io/v2';
 const apiPath = 'panduola666';
 const app ={
@@ -14,7 +18,8 @@ const app ={
                 imagesUrl: []
             },
             openProductModal: false,
-            openRemoveModal: false
+            openRemoveModal: false,
+            pages:{}
         }
     },
     methods: {
@@ -35,30 +40,33 @@ const app ={
             axios.defaults.headers.common['Authorization'] = token;
             axios.post(`${baseUrl}/api/user/check`)
             .then(res=>{
-                alert(`${res.data.uid} 歡迎`); 
+                // alert(`${res.data.uid} 歡迎`); 
                 this.isLoad = true;
                 this.getProductData(); 
             })
             .catch(err=>{
-                alert(JSON.parse(err.request.response).message);
+                // alert(JSON.parse(err.request.response).message);
                 this.isLoad = false;
             })
         },
-        getProductData () {
+        getProductData (page = 1) {
             this.products=[];
-            axios.get(`${baseUrl}/api/${apiPath}/admin/products/all`)
+            axios.get(`${baseUrl}/api/${apiPath}/admin/products?page=${page}`)
             .then(res => {
-                this.products = Object.values(res.data.products);
+                const { products,pagination } = res.data;
+                this.products = Object.values(products);
+                this.pages = pagination;
             })
         },
-        productInfoReset () {
+        productInfoReset (requiredMsg) {
             this.productInfo = {
                 imagesUrl: []
             };
             this.openProductModal = false;
-            this.$refs.requiredMsg.classList.remove('outline');
+            requiredMsg.classList.remove('outline');
         },
-        postProduct () {
+        postProduct (requiredMsg) {
+            if(!this.productInfo.remainingNum) this.productInfo.is_enabled = false;
             // 編輯
             if (this.productInfo.id) {
                 axios.put(`${baseUrl}/api/${apiPath}/admin/product/${this.productInfo.id}`,{
@@ -69,11 +77,13 @@ const app ={
                     this.productInfoReset();
                 })
                 .catch(err => {
-                    const message = JSON.parse(err.request.response).message;
-                    alert(message.join('\n'));
-                    this.$refs.requiredMsg.classList.add('outline');
+                    if(err.request?.status === 400) {
+                        const message = JSON.parse(err.request.response).message;
+                        alert(message.join('\n'));
+                        requiredMsg.classList.add('outline');
+                    }
                 })
-                return
+                return;
             };
             // 新增
             axios.post(`${baseUrl}/api/${apiPath}/admin/product`,{
@@ -84,9 +94,11 @@ const app ={
                 this.productInfoReset();
             })
             .catch(err => {
-                const message = JSON.parse(err.request.response).message;
-                alert(message.join('\n'));
-                this.$refs.requiredMsg.classList.add('outline');
+                if(err.request?.status === 400) {
+                    const message = JSON.parse(err.request.response).message;
+                    alert(message.join('\n'));
+                    requiredMsg.classList.add('outline');
+                }
             });
         },
         removeProduct (id) {
@@ -95,17 +107,23 @@ const app ={
                 this.openRemoveModal = false;
                 this.getProductData();
             })
+        },
+        localImg (inputDom) {
+            this.productInfo.imageUrl = '';
+            const file = inputDom.files[0];
+            const formData = new FormData();
+            formData.append('fileImage',file);
+            axios.post(`${baseUrl}/api/${apiPath}/admin/upload`,formData)
+            .then(res=>{
+                this.productInfo.imageUrl = res.data.imageUrl;
+            })
+            .catch(err=>{
+                console.log(err);
+            })
         }
     },
-    watch:{
-        productInfo:{
-            handler (n,o) {
-                if (this.productInfo.title || this.productInfo.category || this.productInfo.unit || this.productInfo.origin_price || this.productInfo.price) {
-                     this.$refs.requiredMsg.classList.remove('outline');
-                }
-            },
-            deep:true
-        }
+    components:{
+        pagination,productModal,removeModal
     },
     mounted() {
         if (document.cookie.includes('token')) this.checkLogin();
