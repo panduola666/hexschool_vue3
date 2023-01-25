@@ -46,11 +46,11 @@ const app ={
                 this.getProductData(); 
             })
             .catch(err=>{
-                // alert(JSON.parse(err.request.response).message);
+                alert(JSON.parse(err.request.response).message);
                 this.isLoad = false;
             })
         },
-        getProductData (page = 1) {
+        getProductData (page = 1) { 
             this.products=[];
             axios.get(`${baseUrl}/api/${apiPath}/admin/products?page=${page}`)
             .then(res => {
@@ -58,6 +58,9 @@ const app ={
                 this.products = Object.values(products);
                 this.pages = pagination;
             })
+            .catch(err => {
+                alert(err.response.data.message);
+            });
         },
         productInfoReset (requiredMsg) {
             this.productInfo = this.$options.data().productInfo;
@@ -106,6 +109,9 @@ const app ={
                 this.openRemoveModal = false;
                 this.getProductData();
             })
+            .catch(err => {
+                alert(err.response.data.message);
+            })
         },
         localImg (inputDom) {
             this.productInfo.imageUrl = '';
@@ -115,6 +121,9 @@ const app ={
             axios.post(`${baseUrl}/api/${apiPath}/admin/upload`,formData)
             .then(res=>{
                 this.productInfo.imageUrl = res.data.imageUrl;
+            })
+            .catch(err => {
+                alert(err.response.data.message);
             })
         }
     },

@@ -27,7 +27,7 @@
         <div v-else>
             <button type="button"
                 class="w-52 float-right my-4 mr-4 border-2 text-white font-semibold text-xl rounded-2xl p-2 bg-orange-400 shadow-md hover:bg-orange-600 transition-all"
-                @click="openProductModal = true">建立新的產品</button>
+                @click="openProductModal = true;productInfo={remainingNum: 0}">建立新的產品</button>
             <table class="table-auto w-full text-center divide-y divide-black">
                 <thead>
                     <tr>
@@ -140,7 +140,6 @@
                     </tr>
                 </tbody>
             </table>
-
             <!-- 分頁 -->
             <pagination :pages="pages" @get-data="getProductData"></pagination>
 

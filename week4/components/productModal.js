@@ -7,7 +7,10 @@ export default {
                 <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
                     <div
                         class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all w-3/4">
-                        <h2 class="text-2xl text-center bg-yellow-200">{{ product.id ? '編輯產品' : '新增產品'}}</h2>
+                        <h2 class="text-2xl text-center bg-yellow-200">
+                        {{ product.id ? '編輯產品' : '新增產品'}}
+                        <button type="button" @click="productReset(this.$refs.requiredMsg)" class="absolute top-0 right-10 px-2 text-gray-500 hover:text-black">x</button>
+                        </h2>
                         <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                             <div class="flex">
                                 <div class="flex flex-col w-1/2 pr-4">
