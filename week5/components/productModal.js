@@ -9,7 +9,7 @@ export default{
                     {{ product.title }}
                 </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"
-                    aria-label="Close"></button>
+                    aria-label="Close" @click="$emit('update:product',{})"></button>
             </div>
             <div class="modal-body row">
                 <div class="col">
@@ -34,14 +34,14 @@ export default{
                     </div>
                     <div class="input-group">
                         <input type="number" class="form-control" min="1" v-model="qty" />
-                        <button type="button" class="btn btn-primary" @click="addToCart(product.id,qty)">
+                        <button type="button" class="btn btn-primary" @click="addCart(product.id,qty)">
                             加入購物車
                         </button>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" @click="$emit('update:product',{})"  ref="modalClose">
                     關閉
                 </button>
             </div>
@@ -52,5 +52,12 @@ data(){
     return{
         qty: 1
     }
-}
+},
+methods: {
+    addCart(productId,qty) {
+        this.addToCart(productId,qty);
+        alert('已加入購物車');
+        this.$refs.modalClose.click();
+    }
+},
 }

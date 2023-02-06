@@ -2,7 +2,21 @@
   "devDependencies": {
     "tailwindcss": "^3.2.4"
   },
-  "dependencies": {
-    "vue-loading-overlay": "3.0"
-  }
+  "name": "homework",
+  "description": "",
+  "version": "1.0.0",
+  "main": "tailwind.configaa.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/panduola666/hexschool_vue3.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/panduola666/hexschool_vue3/issues"
+  },
+  "homepage": "https://github.com/panduola666/hexschool_vue3#readme"
 }

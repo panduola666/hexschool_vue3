@@ -1,6 +1,5 @@
 export default{
     template:`<nav aria-label="Page navigation example">
-    {{pages}}
     <ul class="pagination justify-content-center">
         <li class="page-item" 
         :class="{'disabled':!pages.has_pre}"

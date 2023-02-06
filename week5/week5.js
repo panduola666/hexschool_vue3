@@ -1,10 +1,6 @@
 import productModal from "./components/productModal.js";
 import pagination from "./components/pagination.js";
-
-
-import Loading from "vue-loading-overlay";
-import "vue-loading-overlay/dist/vue-loading.css";
-Vue.use(Loading);
+// import loadingAnimation from "./components/loadingAnimation.jpg";
 
 const baseUrl = "https://vue3-course-api.hexschool.io/v2";
 const apiPath = "panduola666";
@@ -30,6 +26,9 @@ const app = Vue.createApp({
       shoppingCart: {},
       tempProduct: {},
       isFinish: false,
+      isLoading: false,
+      productLoading: false,
+      cartLoading: false,
       buyerInfo: {
         user: {
           name: "",
@@ -45,18 +44,34 @@ const app = Vue.createApp({
     finishShopping() {
       if (this.shoppingCart.carts.length) {
         this.isFinish = !this.isFinish;
+        this.isLoading = true;
+        setTimeout(()=>{
+          this.isLoading=false;
+        }, 500)
       } else {
         alert("購物車沒有東西");
       }
     },
+    productInfo(product){
+      this.isLoading = true;
+      setTimeout(()=>{
+        this.tempProduct = product;
+      this.isLoading = false;
+      },500)
+    },
     getProducts(page = 1) {
+      this.productLoading = true;
       if (page <= 0 || page > this.pagination.total_pages) return;
       axios
         .get(`${baseUrl}/api/${apiPath}/products?page=${page}`)
         .then((res) => {
+          this.productLoading = false;
           const { pagination, products } = res.data;
           (this.pagination = pagination), products;
           this.products = products;
+        })
+        .catch((err) => {
+          alert(err.response.data.message);
         });
     },
     addToCart(product_id, qty = 1) {
@@ -64,15 +79,26 @@ const app = Vue.createApp({
         product_id,
         qty,
       };
-      axios.post(`${baseUrl}/api/${apiPath}/cart`, { data }).then((res) => {
-        alert(res.data.message);
-        this.getCartList();
-      });
+      axios
+        .post(`${baseUrl}/api/${apiPath}/cart`, { data })
+        .then((res) => {
+          this.getCartList();
+        })
+        .catch((err) => {
+          alert(err.response.data.message);
+        });
     },
     getCartList() {
-      axios.get(`${baseUrl}/api/${apiPath}/cart`).then((res) => {
-        this.shoppingCart = res.data.data;
-      });
+      this.cartLoading = true;
+      axios
+        .get(`${baseUrl}/api/${apiPath}/cart`)
+        .then((res) => {
+          this.cartLoading = false;
+          this.shoppingCart = res.data.data;
+        })
+        .catch((err) => {
+          alert(err.response.data.message);
+        });
     },
     putCartQty(id, product_id, qty) {
       const data = {
@@ -90,25 +116,41 @@ const app = Vue.createApp({
         });
     },
     deleteCart(id) {
-      axios.delete(`${baseUrl}/api/${apiPath}/cart/${id}`).then((res) => {
-        alert(res.data.message);
-        this.getCartList();
-      });
+      axios
+        .delete(`${baseUrl}/api/${apiPath}/cart/${id}`)
+        .then((res) => {
+          this.getCartList();
+        })
+        .catch((err) => {
+          alert(err.response.data.message);
+        });
     },
     deleteAllCart() {
-      axios.delete(`${baseUrl}/api/${apiPath}/carts`).then((res) => {
-        alert("已清空購物車內容");
-        this.getCartList();
-      });
+      axios
+        .delete(`${baseUrl}/api/${apiPath}/carts`)
+        .then((res) => {
+          alert("已清空購物車內容");
+          this.getCartList();
+        })
+        .catch((err) => {
+          alert(err.response.data.message);
+        });
     },
     postOrder() {
       const data = this.buyerInfo;
-      axios.post(`${baseUrl}/api/${apiPath}/order`, { data }).then((res) => {
-        alert(res.data.message);
-        this.buyerInfo = this.$options.data().buyerInfo;
-        this.getCartList();
-        this.isFinish = false;
-      });
+      this.isLoading = true;
+      axios
+        .post(`${baseUrl}/api/${apiPath}/order`, { data })
+        .then((res) => {
+          alert(res.data.message);
+          this.isLoading=false;
+          this.buyerInfo = this.$options.data().buyerInfo;
+          this.getCartList();
+          this.isFinish = false;
+        })
+        .catch((err) => {
+          alert(err.response.data.message);
+        });
     },
   },
   mounted() {
@@ -118,11 +160,14 @@ const app = Vue.createApp({
   components: {
     productModal,
     pagination,
-    Loading
+    // loadingAnimation
   },
 });
-console.log(app);
-app.use('loading',vueLoadingOverlay)
+
+// app.use(VueLoading.LoadingPlugin);
+// 元件註冊
+app.component("loading", VueLoading.Component);
+
 app.component("VForm", VeeValidate.Form);
 app.component("VField", VeeValidate.Field);
 app.component("ErrorMessage", VeeValidate.ErrorMessage);
