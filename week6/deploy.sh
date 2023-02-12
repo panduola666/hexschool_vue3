@@ -21,9 +21,9 @@
     git commit -m 'deploy'
 
     # if you are deploying to https://panduola666.github.io
-    # git push -f git@github.com:panduola666/panduola666.github.io.git main
+    git push -f git@github.com:panduola666/panduola666.github.io.git main
 
     # if you are deploying to https://panduola666.github.io/hexschool_vue3
-    git push -f https://github.com/panduola666/hexschool_vue3.git main:week6
+    # git push -f https://github.com/panduola666/hexschool_vue3.git main:week6
 
     cd -
