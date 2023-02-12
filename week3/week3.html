@@ -164,7 +164,10 @@
                                             <img :src="image" :alt="'圖片' + (index+1)" class="h-32 object-cover mb-2">
                                         </template>
                                     </div>
-                                    <button type="button"
+                                    <button type="button" v-if="!productInfo.imagesUrl"
+                                        class="border-2 border-yellow-500 text-yellow-500 font-bold rounded hover:bg-yellow-500 hover:text-white transition-all py-2 my-2 disabled:bg-gray-300 disabled:text-white disabled:border-none"
+                                        @click="productInfo.imagesUrl = ['']">新增圖片</button>
+                                    <button type="button" v-else
                                         class="border-2 border-yellow-500 text-yellow-500 font-bold rounded hover:bg-yellow-500 hover:text-white transition-all py-2 my-2 disabled:bg-gray-300 disabled:text-white disabled:border-none"
                                         @click="productInfo.imagesUrl.push('')"
                                         :disabled="productInfo.imagesUrl[productInfo.imagesUrl.length -1] === ''">新增圖片</button>
