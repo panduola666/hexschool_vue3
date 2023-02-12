@@ -34,16 +34,28 @@ export const cartsStore = defineStore("cartsStore", {
       axios
         .delete(`${VITE_URL}/api/${VITE_APIPATH}/carts`)
         .then(() => {
-          alert('購物車已清空');
+          alert("購物車已清空");
           this.getCarts();
         })
         .catch((err) => {
           alert(err.response.data.message);
         });
     },
-    editorCart(id, qty) {
-      console.log("變更數量");
-      console.log(id, qty);
+    editorCart(item, qty) {
+      const { id, product } = item;
+      const data = {
+        product_id: product.id,
+        qty: Number(qty),
+      };
+      axios
+        .put(`${VITE_URL}/api/${VITE_APIPATH}/cart/${id}`, { data })
+        .then((res) => {
+          alert(res.data.message);
+          this.getCarts();
+        })
+        .catch((err) => {
+          alert(err.response.data.message.join("\n"));
+        });
     },
   },
 });

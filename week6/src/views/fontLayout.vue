@@ -15,6 +15,7 @@
           <router-link
             to="/products?page=1"
             class="nav-link"
+            @click="getProducts(1)"
             :class="{ active: this.$route.fullPath.includes('products') }"
             >產品列表</router-link
           >
@@ -52,6 +53,7 @@
 import { RouterLink, RouterView } from "vue-router";
 import { mapState, mapActions } from "pinia";
 import { cartsStore } from "../stores/cartsStore";
+import { productsStore } from "../stores/productsStore.js";
 export default {
   data() {
     return {};
@@ -61,6 +63,7 @@ export default {
   },
   methods: {
     ...mapActions(cartsStore, ["getCarts"]),
+    ...mapActions(productsStore, ["getProducts"]),
   },
   components: {
     RouterLink,

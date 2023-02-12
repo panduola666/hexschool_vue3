@@ -19,7 +19,6 @@ export const userStore = defineStore("userStore", {
         .post(`${VITE_URL}/api/user/check`)
         .then(() => {
           router.push("/admin");
-          console.log("登入成功");
         })
         .catch((err) => {
           alert(err.response.data.message);

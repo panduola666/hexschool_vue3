@@ -41,7 +41,7 @@
                 id=""
                 :value="cart.qty"
                 class="w-25"
-                @change="editorCart(cart.id, $event.target.value)"
+                @change="editorCart(cart, $event.target.value)"
               >
                 <option :value="i" v-for="i in 20" :key="i">{{ i }}</option>
               </select>
@@ -64,8 +64,8 @@
       v-slot="{ errors }"
       action=""
       class="d-grid gap-3 w-75 mx-auto pb-5 orderForm"
-      @submit="orderPost"
       @invalid-submit="onInvalidSubmit"
+      @submit="orderPost"
     >
       <div>
         <label for="email" class="form-label">Email</label>
@@ -144,7 +144,9 @@
         ></textarea>
       </div>
       <div class="text-center">
-        <button type="submit" class="w-50 btn btn-primary p-3">送出訂單</button>
+        <button type="submit" class="w-50 btn btn-primary p-3" ref="submit-btn">
+          送出訂單
+        </button>
       </div>
     </VForm>
   </div>
@@ -197,6 +199,7 @@ export default {
       "editorCart",
     ]),
     orderPost() {
+      this.$refs["submit-btn"].disabled = true;
       const data = {
         user: { ...this.buyerInfo },
         message: this.buyerMessage,
@@ -205,6 +208,7 @@ export default {
         .post(`${VITE_URL}/api/${VITE_APIPATH}/order`, { data })
         .then((res) => {
           alert(res.data.message);
+          this.$refs["submit-btn"].disabled = false;
           this.buyerInfo = this.$options.data().buyerInfo;
           this.buyerMessage = "";
           this.getCarts();
@@ -212,6 +216,7 @@ export default {
         })
         .catch((err) => {
           alert(err.response.data.message);
+          this.$refs["submit-btn"].disabled = false;
         });
     },
     onInvalidSubmit({ errors }) {

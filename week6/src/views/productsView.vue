@@ -191,7 +191,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(productsStore, ["products", "pagination"]),
+    ...mapState(productsStore, ["products", "pagination", "oldPage"]),
   },
   methods: {
     ...mapActions(cartsStore, ["getCarts"]),
@@ -204,7 +204,6 @@ export default {
       this.$http
         .post(`${VITE_URL}/api/${VITE_APIPATH}/cart`, { data })
         .then((res) => {
-          console.log(res.data);
           alert(res.data.message);
           this.myModal.hide();
           this.qty = 1;

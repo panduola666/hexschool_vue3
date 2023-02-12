@@ -21,5 +21,4 @@ export const productsStore = defineStore("productsStore", {
       router.push({ query: { page: this.pagination.current_page } });
     },
   },
-  // getters: {}
 });
