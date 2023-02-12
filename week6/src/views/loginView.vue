@@ -65,7 +65,7 @@ export default {
   mounted() {
     console.log();
     if (document.cookie.match("token")) {
-      alert('登入成功')
+      alert("登入成功");
       this.checkLogin();
     }
   },
