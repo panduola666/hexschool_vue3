@@ -124,34 +124,47 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-if="cartLoading">
-                                <td colspan="5">
-                                    <img src="./loadingAnimation.svg" alt="">
-                                </td>
-                            </tr>
-                            <template v-else>
-                                <tr v-for="item in shoppingCart.carts" :key="item.id">
-                                    <td>
-                                        <button type="button" class="btn btn-outline-danger"
-                                            @click="deleteCart(item.id)">
-                                            X
-                                        </button>
+                            <template v-if="shoppingCart.carts && !shoppingCart.carts.length">
+                                <tr v-if="cartLoading">
+                                    <td colspan="5">
+                                        <img src="./loadingAnimation.svg" alt="">
                                     </td>
-                                    <td class="w-25">
-                                        <img :src="item.product.imageUrl" :alt="item.product.title" class="img-fluid" />
-                                    </td>
-                                    <td>{{ item.product.title }}</td>
-
-                                    <td class="w-25">
-                                        <div class="input-group">
-                                            <input type="number" class="form-control" min="1" :value="item.qty"
-                                                @change="putCartQty(item.id, item.product.id, Number($event.target.value))"
-                                                onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" />
-                                            <span class="input-group-text">個</span>
-                                        </div>
-                                    </td>
-                                    <td>$ {{item.total}}</td>
                                 </tr>
+                                <tr v-else>
+                                    <td colspan="5" class="py-5 h3 fw-bold">當前購物車沒有商品</td>
+                                </tr>
+                            </template>
+                            <template v-else>
+                                <tr v-if="cartLoading">
+                                    <td colspan="5">
+                                        <img src="./loadingAnimation.svg" alt="">
+                                    </td>
+                                </tr>
+                                <template v-else>
+                                    <tr v-for="item in shoppingCart.carts" :key="item.id">
+                                        <td>
+                                            <button type="button" class="btn btn-outline-danger"
+                                                @click="deleteCart(item.id)">
+                                                X
+                                            </button>
+                                        </td>
+                                        <td class="w-25">
+                                            <img :src="item.product.imageUrl" :alt="item.product.title"
+                                                class="img-fluid" />
+                                        </td>
+                                        <td>{{ item.product.title }}</td>
+
+                                        <td class="w-25">
+                                            <div class="input-group">
+                                                <input type="number" class="form-control" min="1" :value="item.qty"
+                                                    @change="putCartQty(item.id, item.product.id, Number($event.target.value))"
+                                                    onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))" />
+                                                <span class="input-group-text">個</span>
+                                            </div>
+                                        </td>
+                                        <td>$ {{item.total}}</td>
+                                    </tr>
+                                </template>
                             </template>
 
                         </tbody>
