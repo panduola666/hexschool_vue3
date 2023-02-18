@@ -60,6 +60,7 @@ const app = Vue.createApp({
       },500)
     },
     getProducts(page = 1) {
+      if (page === this.pagination.current_page) return;
       this.productLoading = true;
       if (page <= 0 || page > this.pagination.total_pages) return;
       axios

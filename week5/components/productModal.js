@@ -57,6 +57,7 @@ methods: {
     addCart(productId,qty) {
         this.addToCart(productId,qty);
         alert('已加入購物車');
+        this.qty = 1;
         this.$refs.modalClose.click();
     }
 },

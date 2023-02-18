@@ -103,13 +103,13 @@
 
                 <!-- Modal -->
                 <product-modal v-model:product="tempProduct" :add-to-cart="addToCart"></product-modal>
-
             </div>
             <div class="col py-2">
                 <section :class="{'d-none': isFinish}">
                     <h1 class="fs-4 d-flex justify-content-between mt-2">
                         購物車
-                        <button class="btn btn-outline-danger" @click="deleteAllCart">
+                        <button class="btn btn-outline-danger" @click="deleteAllCart"
+                            :disabled="shoppingCart.carts && !shoppingCart.carts.length">
                             清空購物車
                         </button>
                     </h1>

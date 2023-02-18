@@ -26,7 +26,4 @@ export default{
     </ul>
 </nav>`,
 props:['pages','getProducts'],
-mounted() {
-
-},
 }
