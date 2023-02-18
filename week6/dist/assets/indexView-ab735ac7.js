@@ -1,1 +1,0 @@
-import{b as o}from"./axios-9e497617.js";import{u as e}from"./userStore-341b9b73.js";import{b7 as t,ak as r,m as s}from"./_plugin-vue_export-helper-b8bbd0ea.js";import"./index-40afd15c.js";const c={methods:{...o(e,["checkLogin"])},mounted(){this.checkLogin()}};function n(a,i,m,p,d,f){return r(),s("div",null,"後台首頁")}const k=t(c,[["render",n]]);export{k as default};
