@@ -6,10 +6,10 @@ const router = createRouter({
     {
       path: "/",
       component: () => import("../views/fontLayout.vue"),
-
       children: [
         {
           path: "",
+          name: "home",
           component: () => import("../views/indexView.vue"),
         },
         {
@@ -34,6 +34,12 @@ const router = createRouter({
           component: () => import("../views/admin/indexView.vue"),
         },
       ],
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      redirect: {
+        name: "home",
+      },
     },
   ],
 });

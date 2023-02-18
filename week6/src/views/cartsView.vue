@@ -6,25 +6,32 @@
         type="button"
         class="btn btn-outline-danger float-end"
         @click="deleteAllCarts"
+        v-if="carts.carts?.length"
       >
         清空購物車
       </button>
     </h1>
-    <table class="table table-hover align-middle text-center">
-      <thead>
-        <tr>
-          <th></th>
-          <th>品名</th>
-          <th>數量</th>
-          <th>單價</th>
-          <th>總計</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-if="carts.carts && !carts.carts.length">
-          <td colspan="5" class="p-3">當前購物車沒有東西</td>
-        </tr>
-        <template v-else>
+    <section
+      v-if="carts.carts && !carts.carts.length"
+      class="d-flex flex-column text-center align-items-center gap-3 border py-5 shadow"
+    >
+      <h2 class="h3">當前購物車沒有商品</h2>
+      <router-link to="/products?page=1" class="btn btn-primary"
+        >來去選購</router-link
+      >
+    </section>
+    <div v-else>
+      <table class="table table-hover align-middle text-center">
+        <thead>
+          <tr>
+            <th></th>
+            <th>品名</th>
+            <th>數量</th>
+            <th>單價</th>
+            <th>總計</th>
+          </tr>
+        </thead>
+        <tbody>
           <tr v-for="cart in carts.carts" :key="cart.id">
             <td>
               <button
@@ -50,105 +57,112 @@
             <td>{{ cart.product.price }}</td>
             <td>{{ cart.total }}</td>
           </tr>
-        </template>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="4" class="text-end">總計</td>
-          <td>{{ carts.total }}</td>
-        </tr>
-      </tfoot>
-    </table>
-    <h1 class="h3 text-center mt-5">確認訂單</h1>
-    <VForm
-      v-slot="{ errors }"
-      action=""
-      class="d-grid gap-3 w-75 mx-auto pb-5 orderForm"
-      @invalid-submit="onInvalidSubmit"
-      @submit="orderPost"
-    >
-      <div>
-        <label for="email" class="form-label">Email</label>
-        <VField
-          type="email"
-          name="Email"
-          id="email"
-          placeholder="請輸入 Email"
-          class="form-control"
-          v-model="buyerInfo.email"
-          :class="{
-            'is-invalid': errors['Email'],
-            'is-valid': buyerInfo.email,
-          }"
-          rules="required|email"
-        />
-        <ErrorMessage name="Email" class="invalid-feedback"></ErrorMessage>
-      </div>
-      <div>
-        <label for="name" class="form-label">收件人姓名</label>
-        <VField
-          type="text"
-          name="姓名"
-          id="name"
-          placeholder="請輸入姓名"
-          class="form-control"
-          v-model="buyerInfo.name"
-          :class="{ 'is-invalid': errors['姓名'], 'is-valid': buyerInfo.name }"
-          rules="required"
-        />
-        <ErrorMessage name="姓名" class="invalid-feedback"></ErrorMessage>
-      </div>
-      <div>
-        <label for="tel" class="form-label">收件人手機</label>
-        <VField
-          type="tel"
-          name="手機號碼"
-          id="tel"
-          placeholder="請輸入手機號碼"
-          class="form-control"
-          v-model="buyerInfo.tel"
-          :class="{
-            'is-invalid': errors['手機號碼'],
-            'is-valid': buyerInfo.tel,
-          }"
-          rules="required|numeric|length:10"
-        />
-        <ErrorMessage name="手機號碼" class="invalid-feedback"></ErrorMessage>
-      </div>
-      <div>
-        <label for="address" class="form-label">收件人地址</label>
-        <VField
-          type="text"
-          name="地址"
-          id="address"
-          placeholder="請輸入地址"
-          class="form-control"
-          v-model="buyerInfo.address"
-          :class="{
-            'is-invalid': errors['地址'],
-            'is-valid': buyerInfo.address,
-          }"
-          rules="required"
-        />
-        <ErrorMessage name="地址" class="invalid-feedback"></ErrorMessage>
-      </div>
-      <div>
-        <label for="message" class="form-label">留言</label>
-        <textarea
-          name=""
-          id="message"
-          class="form-control"
-          cols="30"
-          rows="10"
-          v-model="buyerMessage"
-        ></textarea>
-      </div>
-      <div class="text-center">
-        <button type="submit" class="w-50 btn btn-primary p-3" ref="submit-btn">
-          送出訂單
-        </button>
-      </div>
-    </VForm>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="4" class="text-end">總計</td>
+            <td>{{ carts.total }}</td>
+          </tr>
+        </tfoot>
+      </table>
+      <h1 class="h3 text-center mt-5">確認訂單</h1>
+      <VForm
+        v-slot="{ errors }"
+        action=""
+        class="d-grid gap-3 w-75 mx-auto pb-5 orderForm"
+        @invalid-submit="onInvalidSubmit"
+        @submit="orderPost"
+      >
+        <div>
+          <label for="email" class="form-label">Email</label>
+          <VField
+            type="email"
+            name="Email"
+            id="email"
+            placeholder="請輸入 Email"
+            class="form-control"
+            v-model="buyerInfo.email"
+            :class="{
+              'is-invalid': errors['Email'],
+              'is-valid': buyerInfo.email,
+            }"
+            rules="required|email"
+          />
+          <ErrorMessage name="Email" class="invalid-feedback"></ErrorMessage>
+        </div>
+        <div>
+          <label for="name" class="form-label">收件人姓名</label>
+          <VField
+            type="text"
+            name="姓名"
+            id="name"
+            placeholder="請輸入姓名"
+            class="form-control"
+            v-model="buyerInfo.name"
+            :class="{
+              'is-invalid': errors['姓名'],
+              'is-valid': buyerInfo.name,
+            }"
+            rules="required"
+          />
+          <ErrorMessage name="姓名" class="invalid-feedback"></ErrorMessage>
+        </div>
+        <div>
+          <label for="tel" class="form-label">收件人手機</label>
+          <VField
+            type="tel"
+            name="手機號碼"
+            id="tel"
+            placeholder="請輸入手機號碼"
+            class="form-control"
+            v-model="buyerInfo.tel"
+            :class="{
+              'is-invalid': errors['手機號碼'],
+              'is-valid': buyerInfo.tel,
+            }"
+            rules="required|numeric|length:10"
+          />
+          <ErrorMessage name="手機號碼" class="invalid-feedback"></ErrorMessage>
+        </div>
+        <div>
+          <label for="address" class="form-label">收件人地址</label>
+          <VField
+            type="text"
+            name="地址"
+            id="address"
+            placeholder="請輸入地址"
+            class="form-control"
+            v-model="buyerInfo.address"
+            :class="{
+              'is-invalid': errors['地址'],
+              'is-valid': buyerInfo.address,
+            }"
+            rules="required"
+          />
+          <ErrorMessage name="地址" class="invalid-feedback"></ErrorMessage>
+        </div>
+        <div>
+          <label for="message" class="form-label">留言</label>
+          <textarea
+            name=""
+            id="message"
+            class="form-control"
+            cols="30"
+            rows="10"
+            v-model="buyerMessage"
+          ></textarea>
+        </div>
+        <div class="text-center">
+          <button
+            type="submit"
+            class="w-50 btn btn-primary p-3"
+            ref="submit-btn"
+          >
+            送出訂單
+          </button>
+        </div>
+      </VForm>
+    </div>
   </div>
 </template>
 <script>
@@ -220,8 +234,9 @@ export default {
         });
     },
     onInvalidSubmit({ errors }) {
-      const errorsMsg = Object.values(errors);
-      alert(errorsMsg.join("\n"));
+      console.log(errors);
+      const firstError = Object.keys(errors)[0];
+      document.querySelector(".orderForm")[firstError].focus();
     },
   },
   components: {
