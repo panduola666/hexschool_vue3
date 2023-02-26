@@ -28,11 +28,16 @@ const router = createRouter({
     },
     {
       path: "/admin",
+      component: () => import("../views/admin/adminLayout.vue"),
       children: [
         {
-          path: "",
-          component: () => import("../views/admin/indexView.vue"),
+          path: "products",
+          component: () => import("../views/admin/productsView.vue"),
         },
+        {
+          path: "orders",
+          component: () => import("../views/admin/ordersView.vue"),
+        }
       ],
     },
     {

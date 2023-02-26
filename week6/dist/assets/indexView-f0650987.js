@@ -1,0 +1,1 @@
+import{b7 as e,ak as n,m as t,n as c}from"./plugin-vueexport-helper-6c478766.js";const o={},s=c("h1",null,"首頁",-1),a=[s];function r(_,d){return n(),t("div",null,a)}const l=e(o,[["render",r]]);export{l as default};

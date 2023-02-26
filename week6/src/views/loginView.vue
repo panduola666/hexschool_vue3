@@ -32,7 +32,7 @@
   </form>
 </template>
 <script>
-import { mapActions } from "pinia";
+import { mapState, mapActions } from "pinia";
 import { userStore } from "../stores/userStore.js";
 const { VITE_URL } = import.meta.env;
 
@@ -45,6 +45,9 @@ export default {
       },
     };
   },
+  computed: {
+    ...mapState(userStore, ["isLogin"]),
+  },
   methods: {
     ...mapActions(userStore, ["checkLogin"]),
     login() {
@@ -55,7 +58,7 @@ export default {
           document.cookie = `token=${token}; expires=${new Date(expried)};`;
           alert(message);
           this.$http.defaults.headers.common["Authorization"] = token;
-          this.$router.push("/admin");
+          this.$router.push("/admin/products");
         })
         .catch((err) => {
           alert(err.response.data.message);
@@ -63,10 +66,12 @@ export default {
     },
   },
   mounted() {
-    console.log();
     if (document.cookie.match("token")) {
-      alert("登入成功");
       this.checkLogin();
+      if (this.isLogin) {
+        alert("登入成功");
+        this.$router.push("/admin/products");
+      }
     }
   },
 };
